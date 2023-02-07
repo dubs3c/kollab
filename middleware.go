@@ -11,9 +11,15 @@ func (a *Api) MyMiddleware(next http.Handler) http.Handler {
 			// TODO - create better lookup table. hash table should work
 			for _, response := range *a.DefaultPaths {
 				if response.Path == r.RequestURI {
-					// TODO - include HTTP Header data as well
-					w.Write(response.Body)
-					return
+					if response.Verb == r.Method {
+						if len(response.Headers) != 0 {
+							for key, value := range response.Headers {
+								w.Header().Add(key, value)
+							}
+						}
+						w.Write(response.Body)
+						return
+					}
 				}
 			}
 		}

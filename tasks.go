@@ -13,10 +13,17 @@ func CreateHttpServer(server *Server) {
 	go func() {
 		mux := http.NewServeMux()
 
-		defaultHandler := func(w http.ResponseWriter, req *http.Request) {
-			for _, resp := range server.HttpServer.Responses {
-				if resp.Path == req.RequestURI {
-					w.Write(resp.Body)
+		defaultHandler := func(w http.ResponseWriter, r *http.Request) {
+			for _, response := range server.HttpServer.Responses {
+				if response.Path == r.RequestURI {
+					if r.Method == response.Verb {
+						if len(response.Headers) != 0 {
+							for key, value := range response.Headers {
+								w.Header().Add(key, value)
+							}
+						}
+						w.Write(response.Body)
+					}
 				}
 			}
 		}
@@ -35,10 +42,9 @@ func CreateHttpServer(server *Server) {
 
 		go func(s *http.Server) {
 			<-server.Shutdown
-			log.Println("Received shutdown signal....")
+			log.Printf("[%s] Received shutdown signal....", server.Id.String())
 			if err := s.Shutdown(context.Background()); err != nil {
-				// Error from closing listeners, or context timeout:
-				log.Printf("HTTP server Shutdown: %v", err)
+				log.Printf("[%s] HTTP server Shutdown: %v", server.Id.String(), err)
 			}
 			close(server.Shutdown)
 		}(s)

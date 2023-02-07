@@ -11,11 +11,6 @@ import (
 
 func (a *Api) AddHttpServerHandler(w http.ResponseWriter, r *http.Request) {
 
-	/*
-		need to add paths to Server struct here. To avoid deadlocks/racing,
-		lock access to struct before updating. A mutex needs to be added to the struct
-	*/
-
 	h := &HttpServer{}
 
 	err := json.NewDecoder(r.Body).Decode(&h)
