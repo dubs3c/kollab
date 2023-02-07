@@ -1,0 +1,4 @@
+*.exe
+kollab
+.DS_Store
+.vscode/
