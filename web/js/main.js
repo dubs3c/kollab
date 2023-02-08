@@ -6,15 +6,17 @@ function onAddPathClick() {
     let headers = document.getElementById("http-path-headers").value;
     let body = document.getElementById("http-path-body").value;
 
-    if (path == null || path == undefined) {
+    if (path == null || path == undefined || path == "") {
         console.log("Path is fucked");
+        showToast("Must specify path...",true);
+        return;
     }
 
     if (verb == null || verb == undefined) {
         console.log("verb is fucked");
     }
 
-    if (headers == null || headers == undefined || headers == "") {
+    if (headers == undefined || headers == "") {
         console.log("headers is fucked");
         headers = null;
     }

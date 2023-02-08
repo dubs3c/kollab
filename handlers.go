@@ -55,6 +55,11 @@ func (a *Api) AddDefaultHttpHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if data.Path == "" {
+		RespondWithError(w, 400, "Path can not be empty...")
+		return
+	}
+
 	// TODO: implement mutex
 	*a.DefaultPaths = append(*a.DefaultPaths, data)
 
