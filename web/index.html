@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>KOLLABORATÖR</title>
+    <link rel="stylesheet" href="css/bootstrap-reboot.min.css" />
+    <link rel="stylesheet" href="css/bootstrap-grid.min.css" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <script src="js/bootstrap.bundle.min.js" type="text/javascript"></script>
+    <script src="js/main.js" type="text/javascript"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+          <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+            <span class="fs-4"><strong>KOLLABORATÖR</strong></span>
+          </a>
+    
+          <ul class="nav nav-pills">
+            <li class="nav-item"><a href="#" class="nav-link active" aria-current="page">Home</a></li>
+            <li class="nav-item"><a href="#" class="nav-link">Features</a></li>
+            <li class="nav-item"><a href="#" class="nav-link">Pricing</a></li>
+            <li class="nav-item"><a href="#" class="nav-link">FAQs</a></li>
+            <li class="nav-item"><a href="#" class="nav-link">About</a></li>
+          </ul>
+        </header>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-6 border rounded shadow-sm">
+                <div class="col p-4 d-flex flex-column position-static">
+                <h3>Add a new path to default HTTP server</h3>
+
+                <hr />
+
+                <form>
+                    <div class="row mb-3">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Path</label>
+                        <div class="col-sm-10">
+                            <input type="text" placeholder="/some/path/payload.js" class="form-control" id="http-path">
+                        </div>
+                    </div>
+
+                    <fieldset class="row mb-3">
+
+
+                    <legend class="col-form-label col-sm-2 pt-0">Verb</legend>
+                    <div class="col-sm-10">
+                        <select class="form-select" id="http-path-verb" aria-label="Default select example">
+                            <option selected>Select HTTP Verb</option>
+                            <option value="GET">GET</option>
+                            <option value="POST">POST</option>
+                            <option value="PUT">PUT</option>
+                            <option value="PATCH">PATCH</option>
+                            <option value="DELETE">DELETE</option>
+                            <option value="HEAD">HEAD</option>
+                            <option value="OPTIONS">OPTIONS</option>
+                        </select>
+                    </div>
+                    </fieldset>
+
+                    <div class="row mb-3">
+                        <legend class="col-form-label col-sm-2 pt-0">Headers</legend>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" id="http-path-headers" placeholder="X-API: 12345
+Set-Cookie: loggedin=true; Domain=example.com; Path=/" rows="5"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <legend class="col-form-label col-sm-2 pt-0">Body</legend>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" id="http-path-body" placeholder="<script>alert(1)</script>" rows="5"></textarea>
+                        </div>
+                    </div>
+
+                    <button onclick="onAddPathClick()" type="submit" class="btn btn-primary float-end"><strong>Add path</strong></button>
+                </form>
+
+            </div>
+
+            </div>
+            <div class="col">
+
+
+
+                <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Path</th>
+                        <th scope="col">Verb</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>/x.js</td>
+                        <td>GET</td>
+                        <td><button type="button" class="btn btn-danger btn-sm">Delete</button>
+                            <button type="button" class="btn btn-primary btn-sm">View</button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>/Authenticate/login</td>
+                        <td>POST</td>
+                        <td><button type="button" class="btn btn-danger btn-sm">Delete</button>
+                            <button type="button" class="btn btn-primary btn-sm">View</button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+
+            </div>
+        </div>
+        <br />
+        <br />
+
+        <div class="row">
+
+        </div>
+        <br />
+
+        <div class="row">
+            <div class="col">
+                <h3>HTTP Servers</h3>
+                <hr />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <h3>TCP Servers</h3>
+                <hr />
+            </div>
+        </div>
+        
+    </div> <!-- CONTAINER -->
+</body>
+</html>
