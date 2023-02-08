@@ -1,6 +1,36 @@
 
 
+function addPathToTable(path, verb) {
+    console.log(path);
+    /*
+    <tr>
+        <td>/x.js</td>
+        <td>GET</td>
+        <td><button type="button" class="btn btn-danger btn-sm">Delete</button>
+            <button type="button" class="btn btn-primary btn-sm">View</button>
+        </td>
+    </tr>
+    */
+
+    let tr = document.createElement("tr");
+    let tdPath = document.createElement("td");
+    let tdVerb = document.createElement("td");
+    let tdButtons = document.createElement("td");
+    tdPath.innerText = path 
+    tdVerb.innerText = verb
+    tdButtons.innerHTML = `<button type="button" class="btn btn-danger btn-sm">Delete</button>
+    <button type="button" class="btn btn-primary btn-sm">View</button>`
+    tr.append(tdPath);
+    tr.append(tdVerb);
+    tr.append(tdButtons);
+
+    let pathTable = document.getElementById("path-table");
+    pathTable.append(tr);
+}
+
+
 function onAddPathClick() {
+    console.log("what")
     let path = document.getElementById("http-path").value;
     let verb = document.getElementById("http-path-verb").value;
     let headers = document.getElementById("http-path-headers").value;
@@ -37,6 +67,8 @@ function onAddPathClick() {
 
 function addPath(data) {
 
+    const lol = data;
+
     fetch('http://127.0.0.1:8080/api/defaulthttp', {
         method: 'POST',
         body: JSON.stringify(data),
@@ -52,12 +84,12 @@ function addPath(data) {
 
         ))
         .then(res => {
-
             if(res.ok) {
-                showToast("Path added...")
+                showToast("Path added...");
+                addPathToTable(lol.path, lol.verb);
                 console.log('Success:', res);
             } else {
-                showToast(res.data.error,true);
+                showToast(res.data.error, true);
                 console.log('Error:', res);
             }
         })

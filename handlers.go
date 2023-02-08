@@ -42,7 +42,7 @@ func (a *Api) AddHttpServerHandler(w http.ResponseWriter, r *http.Request) {
 
 	CreateHttpServer(s)
 
-	w.WriteHeader(201)
+	RespondWithJSON(w, 201, map[string]string{"data": "success"})
 
 }
 
@@ -60,10 +60,18 @@ func (a *Api) AddDefaultHttpHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// TODO - improve lookup
+	for _, p := range *a.DefaultPaths {
+		if p.Path == data.Path {
+			RespondWithError(w, 400, "Path already exists...")
+			return
+		}
+	}
+
 	// TODO: implement mutex
 	*a.DefaultPaths = append(*a.DefaultPaths, data)
 
-	w.WriteHeader(201)
+	RespondWithJSON(w, 201, map[string]string{"data": "success"})
 }
 
 func (a *Api) GetAllHttpServer(w http.ResponseWriter, r *http.Request) {
