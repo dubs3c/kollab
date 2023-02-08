@@ -9,6 +9,19 @@ import (
 	"github.com/google/uuid"
 )
 
+// RespondWithError - Return an error
+func RespondWithError(w http.ResponseWriter, code int, msg string) {
+	RespondWithJSON(w, code, map[string]string{"error": msg})
+}
+
+// RespondWithJSON - Respond with a json formatted string
+func RespondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
+	response, _ := json.Marshal(payload)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(code)
+	w.Write(response)
+}
+
 func (a *Api) AddHttpServerHandler(w http.ResponseWriter, r *http.Request) {
 
 	h := &HttpServer{}
@@ -16,7 +29,7 @@ func (a *Api) AddHttpServerHandler(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&h)
 	if err != nil {
 		log.Println(err)
-		w.WriteHeader(400)
+		RespondWithError(w, 400, "Could not parse data")
 		return
 	}
 
@@ -38,7 +51,7 @@ func (a *Api) AddDefaultHttpHandler(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
 		log.Println(err)
-		w.WriteHeader(400)
+		RespondWithError(w, 400, "Could not parse data")
 		return
 	}
 
@@ -61,7 +74,7 @@ func (a *Api) DeleteHttpServer(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "serverId")
 
 	if id == "" {
-		w.WriteHeader(404)
+		RespondWithError(w, 404, "Server ID not supplied")
 		return
 	}
 
@@ -75,7 +88,7 @@ func (a *Api) DeleteHttpServer(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	w.WriteHeader(404)
+	RespondWithError(w, 404, "Could find server")
 }
 
 func (a *Api) PutHttpServer(w http.ResponseWriter, r *http.Request) {

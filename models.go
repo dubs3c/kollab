@@ -5,7 +5,7 @@ import "github.com/google/uuid"
 type HttpResponse struct {
 	Path    string            `json:"path"`
 	Verb    string            `json:"verb"`
-	Headers map[string]string `json:"headers"`
+	Headers map[string]string `json:"headers,omitempty"`
 	Body    []byte            `json:"body"`
 }
 

@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="css/bootstrap-reboot.min.css" />
     <link rel="stylesheet" href="css/bootstrap-grid.min.css" />
     <link rel="stylesheet" href="css/bootstrap.min.css" />
-    <script src="js/bootstrap.bundle.min.js" type="text/javascript"></script>
-    <script src="js/main.js" type="text/javascript"></script>
+    <script src="js/bootstrap.min.js" type="text/javascript"></script>
+    
 </head>
 <body>
     <div class="container">
@@ -28,6 +28,37 @@
     </div>
     <div class="container">
         <div class="row">
+            
+
+            <!-- Begin Toast wrapper -->
+            <div aria-live="polite" aria-atomic="true">
+
+                <div class="toast-container top-0 end-0 p-3">
+                    <div id="toastError" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header text-bg-danger border-0">
+                        <strong class="me-auto">ERROR</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        This is a cool error message for you
+                    </div>
+                    </div>
+                </div>
+
+                <div class="toast-container top-0 end-0 p-3">
+                    <div id="toastSuccess" class="toast text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="d-flex">
+                        <div class="toast-body">
+                            Hello, world! This is a toast message.
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- End Toast wrapper -->
+
             <div class="col-6 border rounded shadow-sm">
                 <div class="col p-4 d-flex flex-column position-static">
                 <h3>Add a new path to default HTTP server</h3>
@@ -137,5 +168,6 @@ Set-Cookie: loggedin=true; Domain=example.com; Path=/" rows="5"></textarea>
         </div>
         
     </div> <!-- CONTAINER -->
+    <script src="js/main.js" type="text/javascript"></script>
 </body>
 </html>
