@@ -1,7 +1,30 @@
 <script lang="ts">
 
-    function onAddPathClick(){
+    import type {Path} from "./../models"
+    import {AddDefaultPath, GetDefaultPaths} from "../actions/DefaultPathAction.svelte"
+    import {defaultPaths} from "./../store"
 
+    let path: string = "";
+    let httpVerb: string = "";
+    let httpHeaders: any = null;
+    let httpBody: string = "";
+
+    //GetDefaultPaths();
+
+    async function onAddPathClick(){
+        const p: Path = {
+            Path: path,
+            Verbs: httpVerb,
+            Headers: httpHeaders,
+            Body: btoa(httpBody),
+        }
+
+        let success = await AddDefaultPath(p);
+        console.log(success);
+        if(success){
+            $defaultPaths.DefaultPaths = [...$defaultPaths.DefaultPaths, p ]
+            console.log($defaultPaths.DefaultPaths);
+        }
     }
 
 </script>
@@ -22,12 +45,12 @@
                 <form>
                     <div class="mb-3">
                         <label for="http-path">Path</label>
-                        <input type="text" placeholder="/some/path/payload.js" class="form-control" id="http-path">
+                        <input type="text" bind:value={path} placeholder="/some/path/payload.js" class="form-control" id="http-path">
                     </div>
                     
                     <div class="mb-3">
                         <label for="floatingSelect">Select HTTP Verb</label>
-                        <select class="form-select" id="http-path-verb" aria-label="Select HTTP verb">
+                        <select bind:value={httpVerb} class="form-select" id="http-path-verb" aria-label="Select HTTP verb">
                             <option selected></option>
                             <option value="GET">GET</option>
                             <option value="POST">POST</option>
@@ -41,13 +64,13 @@
 
                     <div class="mb-3">
                         <label for="http-path-headers">HTTP Headers</label>
-                        <textarea class="form-control" id="http-path-headers" placeholder="X-API: 12345
+                        <textarea bind:value={httpHeaders} class="form-control" id="http-path-headers" placeholder="X-API: 12345
 Set-Cookie: loggedin=true; Domain=example.com; Path=/" style="height: 10em;"></textarea>
                     </div>
 
                     <div class="mb-3">
                         <label for="http-path-body">Response Body</label>
-                        <textarea class="form-control" id="http-path-body" placeholder="&lt;script&gt;alert(1)&lt;/script&gt;" style="height: 15em;"></textarea>
+                        <textarea bind:value={httpBody} class="form-control" id="http-path-body" placeholder="&lt;script&gt;alert(1)&lt;/script&gt;" style="height: 15em;"></textarea>
                     </div>
                 </form>
             </div>
@@ -73,20 +96,23 @@ Set-Cookie: loggedin=true; Domain=example.com; Path=/" style="height: 10em;"></t
                   </tr>
                 </thead>
                 <tbody id="path-table">
-                  <tr>
-                    <td>/x.js</td>
-                    <td>GET</td>
-                    <td><button type="button" class="btn btn-danger btn-sm">Delete</button>
-                        <button type="button" class="btn btn-primary btn-sm">View</button>
-                    </td>
-                  </tr>
-                  <tr>
+                    {#each $defaultPaths.DefaultPaths as item, i}
+                        <tr>
+                            <td>{item.Path}</td>
+                            <td>{item.Verbs}</td>
+                            <td><button type="button" class="btn btn-danger btn-sm">Delete</button>
+                                <button type="button" class="btn btn-primary btn-sm">View</button>
+                            </td>
+                        </tr>
+                    {/each}
+  
+                  <!--<tr>
                     <td>/Authenticate/login</td>
                     <td>POST</td>
                     <td><button type="button" class="btn btn-danger btn-sm">Delete</button>
                         <button type="button" class="btn btn-primary btn-sm">View</button>
                     </td>
-                  </tr>
+                  </tr>-->
                 </tbody>
               </table>
         </div>

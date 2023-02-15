@@ -48,6 +48,7 @@ func main() {
 		r.Put("/http/{serverId}", s.PutHttpServer)
 
 		r.Post("/defaulthttp", s.AddDefaultHttpHandler)
+		r.Get("/defaulthttp", s.GetDefaultHttpHandler)
 
 		r.Post("/tcp", s.AddTcpServer)
 

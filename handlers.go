@@ -74,12 +74,22 @@ func (a *Api) AddDefaultHttpHandler(w http.ResponseWriter, r *http.Request) {
 	RespondWithJSON(w, 201, map[string]string{"data": "success"})
 }
 
-func (a *Api) GetAllHttpServer(w http.ResponseWriter, r *http.Request) {
+func (a *Api) GetDefaultHttpHandler(w http.ResponseWriter, r *http.Request) {
+	data := []HttpResponse{}
 
+	for _, p := range *a.DefaultPaths {
+		data = append(data, *p)
+	}
+
+	RespondWithJSON(w, 200, data)
+}
+
+func (a *Api) GetAllHttpServer(w http.ResponseWriter, r *http.Request) {
+	RespondWithJSON(w, 400, map[string]string{"error": "not implemented yet"})
 }
 
 func (a *Api) GetHttpServer(w http.ResponseWriter, r *http.Request) {
-
+	RespondWithJSON(w, 400, map[string]string{"error": "not implemented yet"})
 }
 
 func (a *Api) DeleteHttpServer(w http.ResponseWriter, r *http.Request) {
