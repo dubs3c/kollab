@@ -3,6 +3,7 @@
 import {baseURL} from "../config.dev.js";
 import {ShowToast} from "./../main"
 import type {Path} from "../models";
+	import { dataset_dev } from "svelte/internal";
 
 
 export async function AddDefaultPath(path: Path): Promise<boolean> {
@@ -37,18 +38,26 @@ export async function AddDefaultPath(path: Path): Promise<boolean> {
 }
 
 
-export async function GetDefaultPaths() {
-    await fetch(baseURL + "/api/defaulthttp", {
+export async function GetDefaultPaths(): Promise<Path[]> {
+    return await fetch(baseURL + "/api/defaulthttp", {
 		method: 'GET'
 	})
     .then((response) => 
-
         response.json().then(data => ({
             data: data,
             status: response.status,
             ok: response.ok
         })
     ))
+    .then(res => {
+        if(res.ok) {
+            let p: Path[] = JSON.parse(JSON.stringify(res.data));
+            return p;
+        } else {
+            let p: Path[] = []
+            return p;
+        }
+    })
 }
 
 </script>

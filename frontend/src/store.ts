@@ -21,7 +21,8 @@ export const defaultPaths = () => {
         subscribe,
         update,
         set,
-        setPath: (url: string) => 
-            update(state => (state = {...state, Path: url})),
+        setPath: (p: Path) => 
+            update(state => (state.DefaultPaths = [...state.DefaultPaths, p])),
     };
-  };*/
+  };
+  */

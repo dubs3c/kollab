@@ -3,16 +3,16 @@ package main
 import "github.com/google/uuid"
 
 type HttpResponse struct {
-	Path    string            `json:"path"`
-	Verb    string            `json:"verb"`
-	Headers map[string]string `json:"headers,omitempty"`
-	Body    []byte            `json:"body"`
+	Path    string            `json:"Path"`
+	Verb    string            `json:"Verb"`
+	Headers map[string]string `json:"Headers,omitempty"`
+	Body    []byte            `json:"Body"`
 }
 
 type HttpServer struct {
-	Name      string         `json:"name"`
-	Port      int            `json:"port"`
-	Responses []HttpResponse `json:"responses"`
+	Name      string         `json:"Name"`
+	Port      int            `json:"Port"`
+	Responses []HttpResponse `json:"Responses"`
 }
 
 type Server struct {

@@ -2,6 +2,7 @@
 
     import type {Path} from "./../models"
     import {AddDefaultPath, GetDefaultPaths} from "../actions/DefaultPathAction.svelte"
+    import { onMount } from "svelte";
     import {defaultPaths} from "./../store"
 
     let path: string = "";
@@ -9,12 +10,23 @@
     let httpHeaders: any = null;
     let httpBody: string = "";
 
-    //GetDefaultPaths();
+    $: path = path.replace(" ", "-");
+
+    $: if(path != "" && !path.startsWith("/")) {
+        path = "/" + path;
+    }
+
+    onMount(async () => {
+        let paths: Path[] = await GetDefaultPaths();
+        console.log(paths);
+        console.log(paths[0].Path);
+        $defaultPaths.DefaultPaths = paths;
+    })
 
     async function onAddPathClick(){
         const p: Path = {
             Path: path,
-            Verbs: httpVerb,
+            Verb: httpVerb,
             Headers: httpHeaders,
             Body: btoa(httpBody),
         }
@@ -99,7 +111,7 @@ Set-Cookie: loggedin=true; Domain=example.com; Path=/" style="height: 10em;"></t
                     {#each $defaultPaths.DefaultPaths as item, i}
                         <tr>
                             <td>{item.Path}</td>
-                            <td>{item.Verbs}</td>
+                            <td>{item.Verb}</td>
                             <td><button type="button" class="btn btn-danger btn-sm">Delete</button>
                                 <button type="button" class="btn btn-primary btn-sm">View</button>
                             </td>
