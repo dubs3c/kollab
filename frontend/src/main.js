@@ -10,7 +10,7 @@ export function ShowToast(body, error) {
     } else {
         thetoast = document.getElementById('toastSuccess');
         toast = new bootstrap.Toast(thetoast);
-        toast._element.childNodes[1].childNodes[1].innerText = body;
+        toast._element.childNodes[0].childNodes[0].innerText = body;
     }
 
     toast.show();

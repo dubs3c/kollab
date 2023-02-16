@@ -3,7 +3,6 @@
 import {baseURL} from "../config.dev.js";
 import {ShowToast} from "./../main"
 import type {Path} from "../models";
-	import { dataset_dev } from "svelte/internal";
 
 
 export async function AddDefaultPath(path: Path, url: string = "/api/defaulthttp", method: string = "POST"): Promise<boolean> {
