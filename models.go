@@ -1,18 +1,29 @@
 package main
 
-import "github.com/google/uuid"
+import (
+	"github.com/google/uuid"
+)
 
-type HttpResponse struct {
-	Path    string            `json:"Path"`
-	Verb    string            `json:"Verb"`
-	Headers map[string]string `json:"Headers,omitempty"`
-	Body    []byte            `json:"Body"`
+type PathResponse struct {
+	Id      uuid.UUID `json:"Id,omitempty"`
+	Path    string    `json:"Path"`
+	Verb    string    `json:"Verb"`
+	Headers []string  `json:"Headers,omitempty"`
+	Body    []byte    `json:"Body"`
+}
+
+type PathRequest struct {
+	Id      string   `json:"Id,omitempty"`
+	Path    string   `json:"Path"`
+	Verb    string   `json:"Verb"`
+	Headers []string `json:"Headers,omitempty"`
+	Body    []byte   `json:"Body"`
 }
 
 type HttpServer struct {
 	Name      string         `json:"Name"`
 	Port      int            `json:"Port"`
-	Responses []HttpResponse `json:"Responses"`
+	Responses []PathResponse `json:"Responses"`
 }
 
 type Server struct {
@@ -22,6 +33,6 @@ type Server struct {
 }
 
 type Api struct {
-	DefaultPaths *[]*HttpResponse
+	DefaultPaths *[]*PathResponse
 	Servers      *[]*Server
 }

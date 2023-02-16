@@ -6,9 +6,9 @@ import type {Path} from "../models";
 	import { dataset_dev } from "svelte/internal";
 
 
-export async function AddDefaultPath(path: Path): Promise<boolean> {
-    return await fetch(baseURL + "/api/defaulthttp", {
-		method: 'POST',
+export async function AddDefaultPath(path: Path, url: string = "/api/defaulthttp", method: string = "POST"): Promise<boolean> {
+    return await fetch(baseURL + url, {
+		method: method,
 		body: JSON.stringify({...path})
 	})
     .then((response) => 
@@ -55,6 +55,29 @@ export async function GetDefaultPaths(): Promise<Path[]> {
             return p;
         } else {
             let p: Path[] = []
+            return p;
+        }
+    })
+}
+
+
+export async function GetPath(id: string): Promise<Path> {
+    return await fetch(baseURL + "/api/defaulthttp/" + id, {
+		method: 'GET'
+	})
+    .then((response) => 
+        response.json().then(data => ({
+            data: data,
+            status: response.status,
+            ok: response.ok
+        })
+    ))
+    .then(res => {
+        if(res.ok) {
+            let p: Path = JSON.parse(JSON.stringify(res.data));
+            return p;
+        } else {
+            let p: Path = {Headers:[],Body:"",Id:"",Verb:"",Path:""}
             return p;
         }
     })

@@ -1,8 +1,9 @@
 
 
 export interface Path {
+    Id: string,
     Path: string,
     Verb: string,
-    Headers: [{[key: string]: string}],
+    Headers: string[],
     Body: string
 }

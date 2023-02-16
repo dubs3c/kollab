@@ -7,7 +7,7 @@
 
     let path: string = "";
     let httpVerb: string = "";
-    let httpHeaders: any = null;
+    let httpHeaders: string = "";
     let httpBody: string = "";
 
     $: path = path.replace(" ", "-");
@@ -18,16 +18,16 @@
 
     onMount(async () => {
         let paths: Path[] = await GetDefaultPaths();
-        console.log(paths);
-        console.log(paths[0].Path);
         $defaultPaths.DefaultPaths = paths;
     })
 
     async function onAddPathClick(){
+        const splitHeaders = httpHeaders.split("\n");
         const p: Path = {
+            Id: "",
             Path: path,
             Verb: httpVerb,
-            Headers: httpHeaders,
+            Headers: splitHeaders,
             Body: btoa(httpBody),
         }
 
@@ -62,7 +62,7 @@
                     
                     <div class="mb-3">
                         <label for="floatingSelect">Select HTTP Verb</label>
-                        <select bind:value={httpVerb} class="form-select" id="http-path-verb" aria-label="Select HTTP verb">
+                        <select required bind:value={httpVerb} class="form-select" id="http-path-verb" aria-label="Select HTTP verb">
                             <option selected></option>
                             <option value="GET">GET</option>
                             <option value="POST">POST</option>
@@ -85,10 +85,10 @@ Set-Cookie: loggedin=true; Domain=example.com; Path=/" style="height: 10em;"></t
                         <textarea bind:value={httpBody} class="form-control" id="http-path-body" placeholder="&lt;script&gt;alert(1)&lt;/script&gt;" style="height: 15em;"></textarea>
                     </div>
                 </form>
-            </div>
-            <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" on:click={onAddPathClick} class="btn btn-primary">Save changes</button>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" on:click={onAddPathClick} class="btn btn-primary">Save changes</button>
             </div>
         </div>
         </div>
@@ -96,7 +96,7 @@ Set-Cookie: loggedin=true; Domain=example.com; Path=/" style="height: 10em;"></t
   
 
     <div class="row">
-        <div class="col-md">
+        <div class="col-md-6">
             <h3>Paths <button type="button" class="btn btn-light btn-sm" aria-label="New" data-bs-toggle="modal" data-bs-target="#exampleModal">New Path</button></h3>
             
             <table class="table">
@@ -112,24 +112,24 @@ Set-Cookie: loggedin=true; Domain=example.com; Path=/" style="height: 10em;"></t
                         <tr>
                             <td>{item.Path}</td>
                             <td>{item.Verb}</td>
-                            <td><button type="button" class="btn btn-danger btn-sm">Delete</button>
-                                <button type="button" class="btn btn-primary btn-sm">View</button>
+                            <td><a href="/path/{item.Id}"><button type="button" class="btn btn-primary btn-sm">View</button></a>
+                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
                             </td>
                         </tr>
                     {/each}
-  
-                  <!--<tr>
-                    <td>/Authenticate/login</td>
-                    <td>POST</td>
-                    <td><button type="button" class="btn btn-danger btn-sm">Delete</button>
-                        <button type="button" class="btn btn-primary btn-sm">View</button>
-                    </td>
-                  </tr>-->
                 </tbody>
               </table>
         </div>
+        <div class="col-md-6">
+            <h3>Event Log</h3>
+            <div style="width: 100%; height: 100%; border: 1px solid red;">
+                <!-- event log from all servers -->
+            </div>
+        </div>
     </div>
 
+    <br />
+    <br />
     <br />
     <br />
 

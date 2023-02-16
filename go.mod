@@ -8,4 +8,7 @@ require (
 	github.com/google/uuid v1.3.0
 )
 
-require github.com/go-chi/cors v1.2.1 // indirect
+require (
+	github.com/go-chi/cors v1.2.1 // indirect
+	github.com/segmentio/ksuid v1.0.4 // indirect
+)

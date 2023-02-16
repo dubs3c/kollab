@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -14,12 +15,14 @@ func CreateHttpServer(server *Server) {
 		mux := http.NewServeMux()
 
 		defaultHandler := func(w http.ResponseWriter, r *http.Request) {
+			var h []string = []string{}
 			for _, response := range server.HttpServer.Responses {
 				if response.Path == r.RequestURI {
 					if r.Method == response.Verb {
 						if len(response.Headers) != 0 {
-							for key, value := range response.Headers {
-								w.Header().Add(key, value)
+							for _, header := range response.Headers {
+								h = strings.Split(header, ":")
+								w.Header().Add(h[0], h[1])
 							}
 						}
 						w.Write(response.Body)

@@ -19,7 +19,7 @@ func main() {
 	r := chi.NewRouter()
 	s := &Api{
 		Servers:      &[]*Server{},
-		DefaultPaths: &[]*HttpResponse{},
+		DefaultPaths: &[]*PathResponse{},
 	}
 
 	r.Use(middleware.RequestID)
@@ -47,8 +47,11 @@ func main() {
 		r.Delete("/http/{serverId}", s.DeleteHttpServer)
 		r.Put("/http/{serverId}", s.PutHttpServer)
 
-		r.Post("/defaulthttp", s.AddDefaultHttpHandler)
-		r.Get("/defaulthttp", s.GetDefaultHttpHandler)
+		r.Post("/defaulthttp", s.AddPath)
+		r.Get("/defaulthttp", s.GetAllPaths)
+		r.Get("/defaulthttp/{pathId}", s.GetPath)
+		r.Put("/defaulthttp/{pathId}", s.UpdatePath)
+		r.Delete("/defaulthttp/{pathId}", s.DeletePath)
 
 		r.Post("/tcp", s.AddTcpServer)
 

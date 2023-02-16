@@ -46,8 +46,9 @@ func (a *Api) AddHttpServerHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (a *Api) AddDefaultHttpHandler(w http.ResponseWriter, r *http.Request) {
-	data := &HttpResponse{}
+func (a *Api) AddPath(w http.ResponseWriter, r *http.Request) {
+
+	data := &PathRequest{}
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
 		log.Println(err)
@@ -68,20 +69,154 @@ func (a *Api) AddDefaultHttpHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	pr := &PathResponse{
+		Id:      uuid.New(),
+		Path:    data.Path,
+		Verb:    data.Verb,
+		Headers: data.Headers,
+		Body:    data.Body,
+	}
 	// TODO: implement mutex
-	*a.DefaultPaths = append(*a.DefaultPaths, data)
+	*a.DefaultPaths = append(*a.DefaultPaths, pr)
 
 	RespondWithJSON(w, 201, map[string]string{"data": "success"})
 }
 
-func (a *Api) GetDefaultHttpHandler(w http.ResponseWriter, r *http.Request) {
-	data := []HttpResponse{}
+func (a *Api) GetAllPaths(w http.ResponseWriter, r *http.Request) {
+	data := []PathResponse{}
 
 	for _, p := range *a.DefaultPaths {
 		data = append(data, *p)
 	}
 
 	RespondWithJSON(w, 200, data)
+}
+
+func (a *Api) GetPath(w http.ResponseWriter, r *http.Request) {
+
+	id := chi.URLParam(r, "pathId")
+	uid, err := uuid.Parse(id)
+	if err != nil {
+		RespondWithError(w, 404, "ID not recognized")
+		return
+	}
+
+	if id == "" {
+		RespondWithError(w, 404, "Server ID not supplied")
+		return
+	}
+
+	data := &PathResponse{}
+
+	for _, p := range *a.DefaultPaths {
+		if p.Id == uid {
+			data = p
+			break
+		}
+	}
+
+	if (data == &PathResponse{}) {
+		RespondWithError(w, 404, "Path ID not found")
+	} else {
+		RespondWithJSON(w, 200, data)
+	}
+
+}
+
+func (a *Api) UpdatePath(w http.ResponseWriter, r *http.Request) {
+
+	id := chi.URLParam(r, "pathId")
+
+	if id == "" {
+		RespondWithError(w, 404, "Server ID not supplied")
+		return
+	}
+
+	uid, err := uuid.Parse(id)
+	if err != nil {
+		RespondWithError(w, 404, "ID not recognized")
+		return
+	}
+
+	data := &PathResponse{}
+	err = json.NewDecoder(r.Body).Decode(&data)
+	if err != nil {
+		log.Println(err)
+		RespondWithError(w, 400, "Could not parse data")
+		return
+	}
+
+	if id != data.Id.String() {
+		RespondWithError(w, 400, "UUID from Path does not match UUID from object")
+		return
+	}
+
+	found := false
+	for _, p := range *a.DefaultPaths {
+		if p.Id == uid {
+			*p = *data
+			found = true
+			break
+		}
+	}
+
+	if !found {
+		RespondWithError(w, 404, "Path ID not found")
+	} else {
+		RespondWithJSON(w, 200, data)
+	}
+}
+
+func (a *Api) DeletePath(w http.ResponseWriter, r *http.Request) {
+
+	id := chi.URLParam(r, "pathId")
+
+	if id == "" {
+		RespondWithError(w, 404, "Server ID not supplied")
+		return
+	}
+
+	uid, err := uuid.Parse(id)
+	if err != nil {
+		RespondWithError(w, 404, "ID not recognized")
+		return
+	}
+
+	data := &PathResponse{}
+	err = json.NewDecoder(r.Body).Decode(&data)
+	if err != nil {
+		log.Println(err)
+		RespondWithError(w, 400, "Could not parse data")
+		return
+	}
+
+	if id != data.Id.String() {
+		RespondWithError(w, 400, "UUID from Path does not match UUID from object")
+		return
+	}
+
+	// yea it works stfu
+	found := false
+	lol := []*PathResponse{}
+	for _, p := range *a.DefaultPaths {
+		if p.Id == uid {
+			found = true
+			continue
+		} else {
+			lol = append(lol, p)
+		}
+
+	}
+
+	if found {
+		*a.DefaultPaths = lol
+	}
+
+	if !found {
+		RespondWithError(w, 404, "Path ID not found")
+	} else {
+		RespondWithJSON(w, 202, map[string]string{"status": "success"})
+	}
 }
 
 func (a *Api) GetAllHttpServer(w http.ResponseWriter, r *http.Request) {
