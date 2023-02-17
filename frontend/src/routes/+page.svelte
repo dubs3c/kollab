@@ -21,21 +21,39 @@
         $defaultPaths.DefaultPaths = paths;
     })
 
-    async function onAddPathClick(){
+    function prepHeaders(): Path {
         const splitHeaders = httpHeaders.split("\n");
-        const p: Path = {
+        return {
             Id: "",
             Path: path,
             Verb: httpVerb,
             Headers: splitHeaders,
             Body: btoa(httpBody),
         }
+    }
 
-        let success = await AddDefaultPath(p);
-        console.log(success);
-        if(success){
-            $defaultPaths.DefaultPaths = [...$defaultPaths.DefaultPaths, p ]
+    async function onAddPathClick(){
+        const p = prepHeaders()
+        let newPath = await AddDefaultPath(p);
+        console.log(newPath);
+        if(Object.keys(newPath).length > 0){
+            $defaultPaths.DefaultPaths = [...$defaultPaths.DefaultPaths, newPath]
             console.log($defaultPaths.DefaultPaths);
+        }
+    }
+
+    function deletePathFromState(p: Path) {
+        // this does not trigger re-render for some reason
+        // const index = $defaultPaths.DefaultPaths.indexOf(p, 0)
+        // delete $defaultPaths.DefaultPaths[index]
+        $defaultPaths.DefaultPaths = $defaultPaths.DefaultPaths.filter(path => path != p)
+
+    }
+
+    async function DeletePathClick(p: Path) {
+        let result = await AddDefaultPath(p, "/api/defaulthttp/" + p.Id, "DELETE");
+        if(Object.keys(result).length > 0){
+            deletePathFromState(p)
         }
     }
 
@@ -113,7 +131,7 @@ Set-Cookie: loggedin=true; Domain=example.com; Path=/" style="height: 10em;"></t
                             <td>{item.Path}</td>
                             <td>{item.Verb}</td>
                             <td><a href="/path/{item.Id}"><button type="button" class="btn btn-primary btn-sm">View</button></a>
-                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                                <button type="button" on:click={() => DeletePathClick(item)} class="btn btn-sm btn-danger">Delete</button>
                             </td>
                         </tr>
                     {/each}

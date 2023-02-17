@@ -5,7 +5,7 @@ import {ShowToast} from "./../main"
 import type {Path} from "../models";
 
 
-export async function AddDefaultPath(path: Path, url: string = "/api/defaulthttp", method: string = "POST"): Promise<boolean> {
+export async function AddDefaultPath(path: Path, url: string = "/api/defaulthttp", method: string = "POST"): Promise<Path> {
     return await fetch(baseURL + url, {
 		method: method,
 		body: JSON.stringify({...path})
@@ -21,17 +21,17 @@ export async function AddDefaultPath(path: Path, url: string = "/api/defaulthttp
         if(res.ok) {
             ShowToast("Path added...");
             console.log('Success:', res);
-            return true;
+            return JSON.parse(JSON.stringify(res.data))
         } else {
             ShowToast(res.data.error, true);
             console.log('Error:', res);
-            return false;
+            return {}
         }
     })
     .catch((error) => {
         ShowToast(error, true)
         console.error('Network Error:', error);
-        return false;
+        return {}
     });
     
 }

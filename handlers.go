@@ -79,7 +79,7 @@ func (a *Api) AddPath(w http.ResponseWriter, r *http.Request) {
 	// TODO: implement mutex
 	*a.DefaultPaths = append(*a.DefaultPaths, pr)
 
-	RespondWithJSON(w, 201, map[string]string{"data": "success"})
+	RespondWithJSON(w, 201, pr)
 }
 
 func (a *Api) GetAllPaths(w http.ResponseWriter, r *http.Request) {

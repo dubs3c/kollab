@@ -4,9 +4,6 @@
     /** @type {import('./$types').PageData} */  
     export let data: Path;
 
-
-
-
     let httpPath: string = data.Path;
     let httpVerb: string = data.Verb;
     let httpHeaders: string = data.Headers.join("\n");
@@ -18,28 +15,25 @@
         httpPath = "/" + httpPath;
     }
 
-    async function onAddPathClick(){
+    function prepHeaders(): Path {
         const splitHeaders = httpHeaders.split("\n");
-        const p: Path = {
+        return {
             Id: data.Id,
             Path: httpPath,
             Verb: httpVerb,
             Headers: splitHeaders,
             Body: btoa(httpBody),
         }
+    }
+
+    async function onAddPathClick(){
+        const p = prepHeaders()
         let success = await AddDefaultPath(p, "/api/defaulthttp/" + data.Id, "PUT");
         console.log(success);   
     }
 
     async function DeletePathClick() {
-        const splitHeaders = httpHeaders.split("\n");
-        const p: Path = {
-            Id: data.Id,
-            Path: httpPath,
-            Verb: httpVerb,
-            Headers: splitHeaders,
-            Body: btoa(httpBody),
-        }
+        const p = prepHeaders()
         let success = await AddDefaultPath(p, "/api/defaulthttp/" + data.Id, "DELETE");
         console.log(success);   
     }
