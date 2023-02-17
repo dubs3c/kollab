@@ -61,12 +61,10 @@ func (a *Api) AddPath(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TODO - improve lookup
-	for _, p := range *a.DefaultPaths {
-		if p.Path == data.Path {
-			RespondWithError(w, 400, "Path already exists...")
-			return
-		}
+	exists, _ := PathExists(a.DB, data.Path)
+	if exists {
+		RespondWithError(w, 400, "Path already exists...")
+		return
 	}
 
 	pr := &PathResponse{
@@ -76,26 +74,29 @@ func (a *Api) AddPath(w http.ResponseWriter, r *http.Request) {
 		Headers: data.Headers,
 		Body:    data.Body,
 	}
-	// TODO: implement mutex
-	*a.DefaultPaths = append(*a.DefaultPaths, pr)
 
-	RespondWithJSON(w, 201, pr)
+	if err = InsertPath(a.DB, pr); err != nil {
+		log.Println(err)
+		RespondWithError(w, 500, "Could insert into db")
+	} else {
+		RespondWithJSON(w, 201, pr)
+	}
+
 }
 
 func (a *Api) GetAllPaths(w http.ResponseWriter, r *http.Request) {
-	data := []PathResponse{}
-
-	for _, p := range *a.DefaultPaths {
-		data = append(data, *p)
+	paths, err := GetAllPaths(a.DB)
+	if err != nil {
+		RespondWithError(w, 500, "Could fetch data from db")
 	}
 
-	RespondWithJSON(w, 200, data)
+	RespondWithJSON(w, 200, paths)
 }
 
 func (a *Api) GetPath(w http.ResponseWriter, r *http.Request) {
 
 	id := chi.URLParam(r, "pathId")
-	uid, err := uuid.Parse(id)
+	_, err := uuid.Parse(id)
 	if err != nil {
 		RespondWithError(w, 404, "ID not recognized")
 		return
@@ -106,19 +107,17 @@ func (a *Api) GetPath(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data := &PathResponse{}
+	p, err := GetPath(a.DB, id)
 
-	for _, p := range *a.DefaultPaths {
-		if p.Id == uid {
-			data = p
-			break
-		}
+	if err != nil {
+		RespondWithError(w, 500, "Could not fetch data from database")
+		return
 	}
 
-	if (data == &PathResponse{}) {
+	if (p == &PathResponse{}) {
 		RespondWithError(w, 404, "Path ID not found")
 	} else {
-		RespondWithJSON(w, 200, data)
+		RespondWithJSON(w, 200, p)
 	}
 
 }
@@ -132,7 +131,7 @@ func (a *Api) UpdatePath(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	uid, err := uuid.Parse(id)
+	_, err := uuid.Parse(id)
 	if err != nil {
 		RespondWithError(w, 404, "ID not recognized")
 		return
@@ -151,16 +150,13 @@ func (a *Api) UpdatePath(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	found := false
-	for _, p := range *a.DefaultPaths {
-		if p.Id == uid {
-			*p = *data
-			found = true
-			break
-		}
+	found, err := UpdatePath(a.DB, data)
+	if err != nil {
+		RespondWithError(w, 500, "Could not update data in database")
+		return
 	}
 
-	if !found {
+	if found != 1 {
 		RespondWithError(w, 404, "Path ID not found")
 	} else {
 		RespondWithJSON(w, 200, data)
@@ -176,7 +172,7 @@ func (a *Api) DeletePath(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	uid, err := uuid.Parse(id)
+	_, err := uuid.Parse(id)
 	if err != nil {
 		RespondWithError(w, 404, "ID not recognized")
 		return
@@ -196,22 +192,13 @@ func (a *Api) DeletePath(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// yea it works stfu
-	found := false
-	lol := []*PathResponse{}
-	for _, p := range *a.DefaultPaths {
-		if p.Id == uid {
-			found = true
-			continue
-		} else {
-			lol = append(lol, p)
-		}
+	found, err := DeletePath(a.DB, data.Id.String())
+	if err != nil {
+		RespondWithError(w, 500, "Could not delete data from database")
+		return
 	}
 
-	if found {
-		*a.DefaultPaths = lol
-	}
-
-	if !found {
+	if found != 1 {
 		RespondWithError(w, 404, "Path ID not found")
 	} else {
 		RespondWithJSON(w, 202, map[string]string{"status": "success"})

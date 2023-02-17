@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
@@ -12,12 +13,28 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
 
+	sqlite, err := sql.Open("sqlite3", "file:the.db?_loc=auto")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer sqlite.Close()
+
+	_, err = sqlite.Exec(SQL_INIT)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	r := chi.NewRouter()
 	s := &Api{
+		DB:           sqlite,
 		Servers:      &[]*Server{},
 		DefaultPaths: &[]*PathResponse{},
 	}
