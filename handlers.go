@@ -205,7 +205,6 @@ func (a *Api) DeletePath(w http.ResponseWriter, r *http.Request) {
 		} else {
 			lol = append(lol, p)
 		}
-
 	}
 
 	if found {
