@@ -72,6 +72,8 @@ func main() {
 
 		r.Post("/tcp", s.AddTcpServer)
 
+		r.Get("/events", s.GetEvents)
+
 	})
 
 	h := &http.Server{

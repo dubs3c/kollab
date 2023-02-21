@@ -41,6 +41,15 @@ CREATE TABLE IF NOT EXISTS server_events (
 );
 `
 
+type Path struct {
+	Id      int       `json:"-" `
+	UUID    uuid.UUID `json:"Id,omitempty"`
+	Path    string    `json:"Path"`
+	Verb    string    `json:"Verb"`
+	Headers []string  `json:"Headers,omitempty"`
+	Body    []byte    `json:"Body"`
+}
+
 type PathResponse struct {
 	Id      uuid.UUID `json:"Id,omitempty"`
 	Path    string    `json:"Path"`
@@ -73,4 +82,10 @@ type Api struct {
 	DB           *sql.DB
 	DefaultPaths *[]*PathResponse
 	Servers      *[]*Server
+}
+
+type EventPath struct {
+	Path           string
+	RequestHeaders map[string][]string
+	IP             string
 }

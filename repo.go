@@ -24,9 +24,9 @@ func InsertPath(db *sql.DB, path *PathResponse) error {
 	return err
 }
 
-func GetAllPaths(db *sql.DB) (*[]PathResponse, error) {
-	paths := &[]PathResponse{}
-	rows, err := db.Query("SELECT uuid, url, verb, headers, body FROM paths")
+func GetAllPaths(db *sql.DB) (*[]Path, error) {
+	paths := &[]Path{}
+	rows, err := db.Query("SELECT id, uuid, url, verb, headers, body FROM paths")
 	if err != nil {
 		return paths, err
 	}
@@ -34,9 +34,9 @@ func GetAllPaths(db *sql.DB) (*[]PathResponse, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		p := PathResponse{}
+		p := Path{}
 		a := ""
-		if err := rows.Scan(&p.Id, &p.Path, &p.Verb, &a, &p.Body); err != nil {
+		if err := rows.Scan(&p.Id, &p.UUID, &p.Path, &p.Verb, &a, &p.Body); err != nil {
 			log.Println("GetAllPaths:", err)
 			continue
 		}
@@ -91,4 +91,41 @@ func UpdatePath(db *sql.DB, path *PathResponse) (int64, error) {
 func InsertServer(db *sql.DB, path PathResponse) error {
 	_, err := db.Exec("INSERT INTO servers(uuid, name, type, port) VALUES(?, ?, ?)", path.Id, path.Path, path.Verb, path.Headers, 0)
 	return err
+}
+
+func CreateEventLogPath(db *sql.DB, pathId int, event []byte) error {
+	_, err := db.Exec("INSERT INTO paths_events(log, fk_path) VALUES(?, ?)", event, pathId)
+	return err
+}
+
+func CreateEventLogServer(db *sql.DB, pathId int, event []byte) error {
+	_, err := db.Exec("INSERT INTO server_events(log, fk_path) VALUES(?, ?)", event, pathId)
+	return err
+}
+
+func GetEventLogPath(db *sql.DB) (*[]EventPath, error) {
+	events := []EventPath{}
+	rows, err := db.Query("SELECT log FROM paths_events")
+	if err != nil {
+		return &events, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		e := EventPath{}
+		a := ""
+		if err := rows.Scan(&a); err != nil {
+			log.Println("GetEventLogPath:", err)
+			continue
+		}
+
+		err = json.Unmarshal([]byte(a), &e)
+		if err != nil {
+			log.Println("GetEventLogPath:", err)
+		}
+
+		events = append(events, e)
+	}
+	return &events, err
 }
