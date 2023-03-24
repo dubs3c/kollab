@@ -82,10 +82,12 @@ type Api struct {
 	DB           *sql.DB
 	DefaultPaths *[]*PathResponse
 	Servers      *[]*Server
+	Broker       *Broker
 }
 
 type EventPath struct {
 	Path           string
 	RequestHeaders map[string][]string
 	IP             string
+	UUID           uuid.UUID `json:"Id"`
 }

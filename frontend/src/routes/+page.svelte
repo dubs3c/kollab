@@ -5,8 +5,9 @@
     import { onMount } from "svelte";
     import {defaultPaths} from "./../store"
 
+
     let path: string = "";
-    let httpVerb: string = "";
+    let httpVerb: string = "GET"; // default http verb
     let httpHeaders: string = "";
     let httpBody: string = "";
 
@@ -17,6 +18,12 @@
     }
 
     onMount(async () => {
+
+        let client = new EventSource("http://localhost:8080/api/stream")
+        client.onmessage = function (msg) {
+            console.log(msg.data)
+        }
+
         let paths: Path[] = await GetDefaultPaths();
         $defaultPaths.DefaultPaths = paths;
     })
@@ -81,7 +88,6 @@
                     <div class="mb-3">
                         <label for="floatingSelect">Select HTTP Verb</label>
                         <select required bind:value={httpVerb} class="form-select" id="http-path-verb" aria-label="Select HTTP verb">
-                            <option selected></option>
                             <option value="GET">GET</option>
                             <option value="POST">POST</option>
                             <option value="PUT">PUT</option>
@@ -140,7 +146,7 @@ Set-Cookie: loggedin=true; Domain=example.com; Path=/" style="height: 10em;"></t
         </div>
         <div class="col-md-6">
             <h3>Event Log</h3>
-            <div style="width: 100%; height: 100%; border: 1px solid red;">
+            <div id="eventlog" style="width: 100%; height: 100%; border: 1px solid red;">
                 <!-- event log from all servers -->
             </div>
         </div>

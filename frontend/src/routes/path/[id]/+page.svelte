@@ -7,7 +7,8 @@
     let httpPath: string = data.Path;
     let httpVerb: string = data.Verb;
     let httpHeaders: string = data.Headers.join("\n");
-    let httpBody: string = atob(data.Body);
+    let httpBody: string = data.Body != null ? atob(data.Body) : data.Body
+    console.log(data.Body);
 
     $: httpPath = httpPath.replace(" ", "-");
 
@@ -59,8 +60,7 @@
                 <div class="mb-3">
                     <label for="floatingSelect">Select HTTP Verb</label>
                     <select required bind:value={httpVerb} class="form-select" id="http-path-verb" aria-label="Select HTTP verb">
-                        <option selected></option>
-                        <option value="GET">GET</option>
+                        <option value="GET" selected>GET</option>
                         <option value="POST">POST</option>
                         <option value="PUT">PUT</option>
                         <option value="PATCH">PATCH</option>

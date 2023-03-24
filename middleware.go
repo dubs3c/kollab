@@ -28,7 +28,11 @@ func (a *Api) MyMiddleware(next http.Handler) http.Handler {
 							Path:           response.Path,
 							IP:             r.RemoteAddr,
 							RequestHeaders: r.Header,
+							UUID:           response.UUID,
 						}
+
+						// Notify SSE broker
+						a.Broker.Notifier <- &event
 
 						eventJson, _ := json.Marshal(event)
 
@@ -39,9 +43,11 @@ func (a *Api) MyMiddleware(next http.Handler) http.Handler {
 						}
 
 						if len(response.Headers) != 0 {
-							for _, header := range response.Headers {
-								h = strings.Split(header, ":")
-								w.Header().Add(h[0], h[1])
+							if response.Headers[0] != "" {
+								for _, header := range response.Headers {
+									h = strings.Split(header, ":")
+									w.Header().Add(h[0], h[1])
+								}
 							}
 						}
 

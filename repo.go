@@ -20,7 +20,7 @@ func InsertPath(db *sql.DB, path *PathResponse) error {
 	if err != nil {
 		return err
 	}
-	_, err = db.Exec("INSERT INTO paths(uuid, url, verb, headers, fk_server) VALUES(?, ?, ?, ?, ?)", path.Id, path.Path, path.Verb, string(headers), 0)
+	_, err = db.Exec("INSERT INTO paths(uuid, url, verb, headers, fk_server, body) VALUES(?, ?, ?, ?, ?, ?)", path.Id, path.Path, path.Verb, string(headers), 0, path.Body)
 	return err
 }
 

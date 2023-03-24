@@ -32,11 +32,14 @@ func main() {
 		log.Fatal(err)
 	}
 
+	broker := NewSSEServer()
+
 	r := chi.NewRouter()
 	s := &Api{
 		DB:           sqlite,
 		Servers:      &[]*Server{},
 		DefaultPaths: &[]*PathResponse{},
+		Broker:       broker,
 	}
 
 	r.Use(middleware.RequestID)
@@ -72,6 +75,8 @@ func main() {
 
 		r.Post("/tcp", s.AddTcpServer)
 
+		r.Get("/stream/{pathId}", s.SSEHandler)
+		r.Get("/stream", s.SSEHandler)
 		r.Get("/events", s.GetEvents)
 
 	})
