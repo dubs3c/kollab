@@ -6,6 +6,20 @@ Hey there, picture this: you want to have some XSS, DTD files, or random data on
 [screenshot-1](.screenshots/screen1.png)
 [screenshot-2](.screenshots/screen2.png)
 
+## Develop
+Go project:
+```
+$ go build .
+$ ./kollab
+```
+
+Frontend project:
+```
+$ cd frontend
+$ npm install
+$ npm run dev -- --open
+```
+
 ## Contributing
 Any feedback or ideas are welcome! Want to improve something? Create a pull request!
 
