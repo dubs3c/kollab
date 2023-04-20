@@ -20,6 +20,8 @@ $ npm install
 $ npm run dev -- --open
 ```
 
+To generate static files: `npm run build`
+
 ## Contributing
 Any feedback or ideas are welcome! Want to improve something? Create a pull request!
 
