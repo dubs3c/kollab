@@ -1,9 +1,10 @@
 <script lang="ts">
 
-    import type {Path} from "./../models"
-    import {AddDefaultPath, GetDefaultPaths} from "../actions/DefaultPathAction.svelte"
-    import { onMount } from "svelte";
+    import type {Path, LogEvent} from "./../models"
+    import {AddDefaultPath, GetDefaultPaths, GetEvents} from "../actions/DefaultPathAction.svelte"
+    import { onMount, onDestroy } from "svelte";
     import {defaultPaths} from "./../store"
+    import Events from "../components/Events/Events.svelte";
 
 
     let path: string = "";
@@ -17,16 +18,14 @@
         path = "/" + path;
     }
 
+    const interval = setInterval(GetEvents, 3000);
+
     onMount(async () => {
-
-        let client = new EventSource("http://localhost:8080/api/stream")
-        client.onmessage = function (msg) {
-            console.log(msg.data)
-        }
-
         let paths: Path[] = await GetDefaultPaths();
         $defaultPaths.DefaultPaths = paths;
     })
+
+    onDestroy(() => clearInterval(interval));
 
     function prepHeaders(): Path {
         const splitHeaders = httpHeaders.split("\n");
@@ -42,7 +41,6 @@
     async function onAddPathClick(){
         const p = prepHeaders()
         let newPath = await AddDefaultPath(p);
-        console.log(newPath);
         if(Object.keys(newPath).length > 0){
             $defaultPaths.DefaultPaths = [...$defaultPaths.DefaultPaths, newPath]
             console.log($defaultPaths.DefaultPaths);
@@ -67,7 +65,7 @@
 </script>
 
 <svelte:head>
-	<title>Kollab | Dashboard </title>
+	<title>KOLLAB | Dashboard</title>
 </svelte:head>
 
     <!-- Modal -->
@@ -120,7 +118,7 @@ Set-Cookie: loggedin=true; Domain=example.com; Path=/" style="height: 10em;"></t
   
 
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md">
             <h3>Paths <button type="button" class="btn btn-light btn-sm" aria-label="New" data-bs-toggle="modal" data-bs-target="#exampleModal">New Path</button></h3>
             
             <table class="table">
@@ -144,12 +142,7 @@ Set-Cookie: loggedin=true; Domain=example.com; Path=/" style="height: 10em;"></t
                 </tbody>
               </table>
         </div>
-        <div class="col-md-6">
-            <h3>Event Log</h3>
-            <div id="eventlog" style="width: 100%; height: 100%; border: 1px solid red;">
-                <!-- event log from all servers -->
-            </div>
-        </div>
+
     </div>
 
     <br />
@@ -160,19 +153,8 @@ Set-Cookie: loggedin=true; Domain=example.com; Path=/" style="height: 10em;"></t
 
     <div class="row">
         <div class="col">
-            <h3>HTTP Servers <button type="button" class="btn btn-light btn-sm" aria-label="New" data-bs-toggle="modal" data-bs-target="#exampleModal">New HTTP Server</button></h3>
-            <hr />
+            <h3>Event Log</h3>
+            <Events/>
         </div>
-
-        <div class="col">
-            <h3>TCP Servers <button type="button" class="btn btn-light btn-sm" aria-label="New" data-bs-toggle="modal" data-bs-target="#exampleModal">New TCP Server</button></h3>
-            <hr />
-        </div>
-
-        <div class="col">
-            <h3>UDP Servers <button type="button" class="btn btn-light btn-sm" aria-label="New" data-bs-toggle="modal" data-bs-target="#exampleModal">New UDP Server</button></h3>
-            <hr />
-        </div>
-
     </div>
 

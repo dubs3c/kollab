@@ -244,7 +244,11 @@ func (a *Api) AddTcpServer(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *Api) GetEvents(w http.ResponseWriter, r *http.Request) {
-	events, err := GetEventLogPath(a.DB)
+	pathId := chi.URLParam(r, "pathId")
+	if pathId == "undefined" {
+		pathId = ""
+	}
+	events, err := GetEventLogPath(a.DB, pathId)
 	if err != nil {
 		log.Println("GetEvents", err)
 		RespondWithError(w, 500, "Could not get events")

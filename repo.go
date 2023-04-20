@@ -103,9 +103,21 @@ func CreateEventLogServer(db *sql.DB, pathId int, event []byte) error {
 	return err
 }
 
-func GetEventLogPath(db *sql.DB) (*[]EventPath, error) {
+func GetEventLogPath(db *sql.DB, pathId string) (*[]EventPath, error) {
 	events := []EventPath{}
-	rows, err := db.Query("SELECT log FROM paths_events")
+	var rows *sql.Rows
+	var err error
+
+	if pathId != "" {
+		rows, err = db.Query(`
+		SELECT pe.log FROM paths AS p
+		LEFT JOIN paths_events AS pe
+		ON pe.fk_path = p.id
+		WHERE p.uuid=?`, pathId)
+	} else {
+		rows, err = db.Query("SELECT log FROM paths_events")
+	}
+
 	if err != nil {
 		return &events, err
 	}

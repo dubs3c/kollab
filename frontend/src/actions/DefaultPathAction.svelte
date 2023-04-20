@@ -2,7 +2,7 @@
 
 import {baseURL} from "../config.dev.js";
 import {ShowToast} from "./../main"
-import type {Path} from "../models";
+import type {Path, LogEvent} from "../models";
 
 
 export async function AddDefaultPath(path: Path, url: string = "/api/defaulthttp", method: string = "POST"): Promise<Path> {
@@ -54,6 +54,34 @@ export async function GetDefaultPaths(): Promise<Path[]> {
             return p;
         } else {
             let p: Path[] = []
+            return p;
+        }
+    })
+}
+
+
+export async function GetEvents(pathId: string = ""): Promise<LogEvent[]> {
+    let url = baseURL + "/api/events"
+    if(pathId != "" && pathId != undefined && pathId != null) {
+        url = baseURL + "/api/events/" + pathId
+    }
+
+    return await fetch(url, {
+		method: 'GET'
+	})
+    .then((response) => 
+        response.json().then(data => ({
+            data: data,
+            status: response.status,
+            ok: response.ok
+        })
+    ))
+    .then(res => {
+        if(res.ok) {
+            let p: LogEvent[] = JSON.parse(JSON.stringify(res.data));
+            return p;
+        } else {
+            let p: LogEvent[] = []
             return p;
         }
     })

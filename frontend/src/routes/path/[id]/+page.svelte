@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Events from "../../../components/Events/Events.svelte";
 	import { AddDefaultPath } from "../../../actions/DefaultPathAction.svelte";
     import type {Path} from "../../../models"
     /** @type {import('./$types').PageData} */  
@@ -8,7 +9,6 @@
     let httpVerb: string = data.Verb;
     let httpHeaders: string = data.Headers.join("\n");
     let httpBody: string = data.Body != null ? atob(data.Body) : data.Body
-    console.log(data.Body);
 
     $: httpPath = httpPath.replace(" ", "-");
 
@@ -88,5 +88,6 @@
     </div>
     <div class="col-md-6">
         <h4>Event Log</h4>
+        <Events pathId={data.Id}/>
     </div>
 </div>

@@ -32,14 +32,11 @@ func main() {
 		log.Fatal(err)
 	}
 
-	broker := NewSSEServer()
-
 	r := chi.NewRouter()
 	s := &Api{
 		DB:           sqlite,
 		Servers:      &[]*Server{},
 		DefaultPaths: &[]*PathResponse{},
-		Broker:       broker,
 	}
 
 	r.Use(middleware.RequestID)
@@ -75,9 +72,8 @@ func main() {
 
 		r.Post("/tcp", s.AddTcpServer)
 
-		r.Get("/stream/{pathId}", s.SSEHandler)
-		r.Get("/stream", s.SSEHandler)
 		r.Get("/events", s.GetEvents)
+		r.Get("/events/{pathId}", s.GetEvents)
 
 	})
 
@@ -96,7 +92,6 @@ func main() {
 		<-sigint
 
 		// We received an interrupt signal, shut down.
-		// TODO: in addition, loop over all servers and issue a shutdown signal
 		log.Println("Received interrupt signal, shutting down this operation...")
 		if err := h.Shutdown(context.Background()); err != nil {
 			// Error from closing listeners, or context timeout:

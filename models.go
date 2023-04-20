@@ -82,7 +82,6 @@ type Api struct {
 	DB           *sql.DB
 	DefaultPaths *[]*PathResponse
 	Servers      *[]*Server
-	Broker       *Broker
 }
 
 type EventPath struct {

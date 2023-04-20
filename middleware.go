@@ -31,9 +31,6 @@ func (a *Api) MyMiddleware(next http.Handler) http.Handler {
 							UUID:           response.UUID,
 						}
 
-						// Notify SSE broker
-						a.Broker.Notifier <- &event
-
 						eventJson, _ := json.Marshal(event)
 
 						if err := CreateEventLogPath(a.DB, response.Id, eventJson); err != nil {
