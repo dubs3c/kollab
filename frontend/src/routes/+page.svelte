@@ -18,14 +18,11 @@
         path = "/" + path;
     }
 
-    const interval = setInterval(GetEvents, 3000);
-
     onMount(async () => {
         let paths: Path[] = await GetDefaultPaths();
         $defaultPaths.DefaultPaths = paths;
     })
 
-    onDestroy(() => clearInterval(interval));
 
     function prepHeaders(): Path {
         const splitHeaders = httpHeaders.split("\n");
