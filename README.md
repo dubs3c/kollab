@@ -3,8 +3,8 @@
 Hey there, picture this: you want to have some XSS, DTD files, or random data on your server, and a target machine will grab it through JavaScript or XXE vulnerabilities, for instance. To get this done, you just pop into your server using SSH and set up nginx to serve files from a certain directory. Next up, create the files you'd like to serve. This tool makes it all a breeze, taking care of everything with a user-friendly graphical interface. Easy peasy!
 
 ## Screenshots
-[screenshot-1](.screenshots/screen1.png)
-[screenshot-2](.screenshots/screen2.png)
+![screenshot-1](.screenshots/screen1.png)
+![screenshot-2](.screenshots/screen2.png)
 
 ## Develop
 Go project:
