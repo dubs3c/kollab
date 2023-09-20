@@ -24,6 +24,9 @@ To generate static files: `npm run build`
 
 ## TODO
 - [ ] When you delete a path, delete corresponding logs
+- [ ] Randomize basic auth password on every startup, print new password in console for user
+- [ ] DNS pingback functionality
+- [ ] Improve frontend - store a subset of event logs in the browser 
 
 ## Contributing
 Any feedback or ideas are welcome! Want to improve something? Create a pull request!
