@@ -81,7 +81,7 @@
                     </div>
                     
                     <div class="mb-3">
-                        <label for="floatingSelect">Select HTTP Verb</label>
+                        <label for="floatingSelect">Select HTTP Request Verb</label>
                         <select required bind:value={httpVerb} class="form-select" id="http-path-verb" aria-label="Select HTTP verb">
                             <option value="GET">GET</option>
                             <option value="POST">POST</option>
@@ -94,7 +94,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="http-path-headers">HTTP Headers</label>
+                        <label for="http-path-headers">HTTP Response Headers</label>
                         <textarea bind:value={httpHeaders} class="form-control" id="http-path-headers" placeholder="X-API: 12345
 Set-Cookie: loggedin=true; Domain=example.com; Path=/" style="height: 10em;"></textarea>
                     </div>
