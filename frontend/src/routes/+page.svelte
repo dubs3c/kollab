@@ -1,5 +1,5 @@
 <script lang="ts">
-
+    import { base } from '$app/paths'
     import type {Path, LogEvent} from "./../models"
     import {AddDefaultPath, GetDefaultPaths, GetEvents} from "../actions/DefaultPathAction.svelte"
     import { onMount, onDestroy } from "svelte";
@@ -131,7 +131,7 @@ Set-Cookie: loggedin=true; Domain=example.com; Path=/" style="height: 10em;"></t
                         <tr>
                             <td>{item.Path}</td>
                             <td>{item.Verb}</td>
-                            <td><a href="/path/{item.Id}"><button type="button" class="btn btn-primary btn-sm">View</button></a>
+                            <td><a href="{base}/path/{item.Id}"><button type="button" class="btn btn-primary btn-sm">View</button></a>
                                 <button type="button" on:click={() => DeletePathClick(item)} class="btn btn-sm btn-danger">Delete</button>
                             </td>
                         </tr>

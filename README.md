@@ -22,6 +22,9 @@ $ npm run dev -- --open
 
 To generate static files: `npm run build`
 
+## TODO
+- [ ] When you delete a path, delete corresponding logs
+
 ## Contributing
 Any feedback or ideas are welcome! Want to improve something? Create a pull request!
 

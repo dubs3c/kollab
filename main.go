@@ -16,6 +16,14 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+/*
+//go:embed all:frontend/build
+var assets embed.FS
+
+	func Assets() (fs.FS, error) {
+		return fs.Sub(assets, "frontend/build")
+	}
+*/
 func main() {
 
 	sqlite, err := sql.Open("sqlite3", "file:the.db?_loc=auto")
@@ -55,6 +63,9 @@ func main() {
 		AllowCredentials: true,
 		MaxAge:           300, // Maximum value not ignored by any of major browsers
 	}))
+
+	//assets, _ := Assets()
+	//fs := http.FileServer(http.FS(assets))
 
 	// API routes
 	r.Route("/api", func(r chi.Router) {

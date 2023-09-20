@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { base } from '$app/paths'
 	import Events from "../../../components/Events/Events.svelte";
 	import { AddDefaultPath } from "../../../actions/DefaultPathAction.svelte";
     import type {Path} from "../../../models"
@@ -43,7 +44,7 @@
   
 <div class="row">
     <div class="col-md">
-        <a href="/"><button class="btn btn-sm btn-dark"><strong>Back</strong></button></a>
+        <a href="{base}"><button class="btn btn-sm btn-dark"><strong>Back</strong></button></a>
         <br />
         <br />
     </div>
@@ -58,7 +59,7 @@
                 </div>
                 
                 <div class="mb-3">
-                    <label for="floatingSelect">Select HTTP Verb</label>
+                    <label for="floatingSelect">Select HTTP Request Verb</label>
                     <select required bind:value={httpVerb} class="form-select" id="http-path-verb" aria-label="Select HTTP verb">
                         <option value="GET" selected>GET</option>
                         <option value="POST">POST</option>
@@ -71,7 +72,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="http-path-headers">HTTP Headers</label>
+                    <label for="http-path-headers">HTTP Response Headers</label>
                     <textarea class="form-control" bind:value={httpHeaders} id="http-path-headers" style="height: 10em;"></textarea>
                 </div>
 
