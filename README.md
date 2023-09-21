@@ -1,6 +1,17 @@
 # KOLLABORATÖR
 
-Hey there, picture this: you want to have some XSS, DTD files, or random data on your server, and a target machine will grab it through JavaScript or XXE vulnerabilities, for instance. To get this done, you just pop into your server using SSH and set up nginx to serve files from a certain directory. Next up, create the files you'd like to serve. This tool makes it all a breeze, taking care of everything with a user-friendly graphical interface. Easy peasy!
+Empower Your Cyber Security Arsenal with KOLLABORATÖR!
+
+KOLLABORATÖR isn't just a tool; it's your open-source companion for lightning-fast, secure payload hosting. Spin up a server, deploy a Docker container, create custom endpoints, and when your mission's done, delete it all – effortlessly.
+
+Key Features:
+
+* **User-Controlled Setup:** Create your server, install Docker, and take the reins.
+* **Payload Hosting:** Define custom endpoints for secure payload delivery.
+* **Efficiency Maximized:** Perfect for dynamic cybersecurity projects.
+* **Open Source:** Join the community, enhance security, and shape the future.
+
+Experience the future of agile, secure payload hosting with KOLLABORATÖR. Get started now and elevate your cybersecurity game with open-source efficiency!
 
 ## Screenshots
 ![screenshot-1](.screenshots/screen1.png)
