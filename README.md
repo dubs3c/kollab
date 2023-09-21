@@ -22,7 +22,7 @@ $ npm run dev -- --open
 
 To generate static files: `npm run build`
 
-### Docker
+## Docker
 Download the appropriate image from https://github.com/dubs3c/kollab/pkgs/container/kollab.
 
 Create a new container based on the image.
