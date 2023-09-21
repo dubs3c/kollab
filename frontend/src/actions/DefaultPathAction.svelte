@@ -1,12 +1,11 @@
 <script context="module" lang="ts">
 
-import {baseURL} from "../config.dev.js";
 import {ShowToast} from "./../main"
 import type {Path, LogEvent} from "../models";
 
 
 export async function AddDefaultPath(path: Path, url: string = "/api/defaulthttp", method: string = "POST"): Promise<Path> {
-    return await fetch(baseURL + url, {
+    return await fetch(url, {
 		method: method,
 		body: JSON.stringify({...path})
 	})
@@ -38,7 +37,7 @@ export async function AddDefaultPath(path: Path, url: string = "/api/defaulthttp
 
 
 export async function GetDefaultPaths(): Promise<Path[]> {
-    return await fetch(baseURL + "/api/defaulthttp", {
+    return await fetch("/api/defaulthttp", {
 		method: 'GET'
 	})
     .then((response) => 
@@ -61,9 +60,9 @@ export async function GetDefaultPaths(): Promise<Path[]> {
 
 
 export async function GetEvents(pathId: string = ""): Promise<LogEvent[]> {
-    let url = baseURL + "/api/events"
+    let url = "/api/events"
     if(pathId != "" && pathId != undefined && pathId != null) {
-        url = baseURL + "/api/events/" + pathId
+        url = "/api/events/" + pathId
     }
 
     return await fetch(url, {
@@ -89,7 +88,7 @@ export async function GetEvents(pathId: string = ""): Promise<LogEvent[]> {
 
 
 export async function GetPath(id: string): Promise<Path> {
-    return await fetch(baseURL + "/api/defaulthttp/" + id, {
+    return await fetch("/api/defaulthttp/" + id, {
 		method: 'GET'
 	})
     .then((response) => 
