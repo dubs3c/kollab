@@ -36,7 +36,8 @@ Visit http://127.0.0.1/mgmt/, login with `kollab:thekollab`.
 - [ ] When you delete a path, delete corresponding logs
 - [ ] Randomize basic auth password on every startup, print new password in console for user
 - [ ] DNS pingback functionality
-- [ ] Improve frontend - store a subset of event logs in the browser 
+- [ ] Improve frontend - store a subset of event logs in the browser
+- [ ] Upload files to be served
 
 ## Contributing
 Any feedback or ideas are welcome! Want to improve something? Create a pull request!
