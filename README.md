@@ -22,6 +22,16 @@ $ npm run dev -- --open
 
 To generate static files: `npm run build`
 
+### Docker
+Download the appropiate image from https://github.com/dubs3c/kollab/pkgs/container/kollab.
+
+Create a new container based on the image.
+```
+sudo docker run -d -p 127.0.0.1:80:80 d7086d146964
+```
+
+Visit http://127.0.0.1/mgmt, login with `kollab:thekollab`.
+
 ## TODO
 - [ ] When you delete a path, delete corresponding logs
 - [ ] Randomize basic auth password on every startup, print new password in console for user
