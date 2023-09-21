@@ -30,7 +30,7 @@ Create a new container based on the image.
 sudo docker run -d -p 127.0.0.1:80:80 d7086d146964
 ```
 
-Visit http://127.0.0.1/mgmt, login with `kollab:thekollab`.
+Visit http://127.0.0.1/mgmt/, login with `kollab:thekollab`.
 
 ## TODO
 - [ ] When you delete a path, delete corresponding logs
