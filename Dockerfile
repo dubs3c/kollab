@@ -3,7 +3,7 @@ FROM node:18-bookworm-slim as build-svelte
 WORKDIR /app
 COPY frontend/ ./
 RUN npm install
-RUN npm run build
+RUN npm run build -- --mode prod
 
 # Stage 2: Build the Go application
 FROM golang:1.21.1-bookworm as build-go
