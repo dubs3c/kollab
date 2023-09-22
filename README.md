@@ -20,7 +20,7 @@ Experience the future of agile, secure payload hosting with KOLLABORATÖR. Get s
 ## Develop
 Go project:
 ```
-$ go build .
+$ go build -o kollab *.go
 $ ./kollab
 ```
 
@@ -31,7 +31,10 @@ $ npm install
 $ npm run dev -- --open
 ```
 
-To generate static files: `npm run build`
+To generate static files. Omit prod if not for production environment.
+```
+npm run build -- --mode prod
+```
 
 ## Docker
 Download the appropriate image from https://github.com/dubs3c/kollab/pkgs/container/kollab.

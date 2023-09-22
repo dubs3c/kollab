@@ -3,8 +3,10 @@
 import {ShowToast} from "./../main"
 import type {Path, LogEvent} from "../models";
 
+const baseURL = import.meta.env.VITE_BASE_URL;
 
-export async function AddDefaultPath(path: Path, url: string = "/api/defaulthttp", method: string = "POST"): Promise<Path> {
+
+export async function AddDefaultPath(path: Path, url: string = baseURL + "/api/defaulthttp", method: string = "POST"): Promise<Path> {
     return await fetch(url, {
 		method: method,
 		body: JSON.stringify({...path})
@@ -37,7 +39,7 @@ export async function AddDefaultPath(path: Path, url: string = "/api/defaulthttp
 
 
 export async function GetDefaultPaths(): Promise<Path[]> {
-    return await fetch("/api/defaulthttp", {
+    return await fetch(baseURL + "/api/defaulthttp", {
 		method: 'GET'
 	})
     .then((response) => 
@@ -60,9 +62,9 @@ export async function GetDefaultPaths(): Promise<Path[]> {
 
 
 export async function GetEvents(pathId: string = ""): Promise<LogEvent[]> {
-    let url = "/api/events"
+    let url = baseURL + "/api/events"
     if(pathId != "" && pathId != undefined && pathId != null) {
-        url = "/api/events/" + pathId
+        url = baseURL + "/api/events/" + pathId
     }
 
     return await fetch(url, {
@@ -88,7 +90,7 @@ export async function GetEvents(pathId: string = ""): Promise<LogEvent[]> {
 
 
 export async function GetPath(id: string): Promise<Path> {
-    return await fetch("/api/defaulthttp/" + id, {
+    return await fetch(baseURL + "/api/defaulthttp/" + id, {
 		method: 'GET'
 	})
     .then((response) => 
