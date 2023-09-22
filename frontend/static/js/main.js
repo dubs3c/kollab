@@ -69,7 +69,7 @@ function addPath(data) {
 
     const lol = data;
 
-    fetch('http://127.0.0.1/api/defaulthttp', {
+    fetch('/api/defaulthttp', {
         method: 'POST',
         body: JSON.stringify(data),
         credentials: 'same-origin', 
