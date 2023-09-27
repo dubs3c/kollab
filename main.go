@@ -13,6 +13,7 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
+	"github.com/google/uuid"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -88,12 +89,26 @@ func main() {
 
 	})
 
+	defaultPort := 8080
+	addr := fmt.Sprintf(":%d", defaultPort)
+
 	h := &http.Server{
-		Addr:           ":8080",
+		Addr:           addr,
 		Handler:        r,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
+	}
+
+	p := &Server{
+		Id:   uuid.UUID{},
+		Name: "Default HTTP Server",
+		Type: "HTTP",
+		Port: defaultPort,
+	}
+
+	if err := InsertServer(s.DB, p); err != nil {
+		log.Println("could not insert default http server, error:", err)
 	}
 
 	idleConnsClosed := make(chan struct{})

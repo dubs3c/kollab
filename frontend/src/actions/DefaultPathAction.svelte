@@ -3,8 +3,10 @@
 import {ShowToast} from "./../main"
 import type {Path, LogEvent} from "../models";
 
-const baseURL = import.meta.env.VITE_BASE_URL;
-
+let baseURL = import.meta.env.VITE_BASE_URL;
+if(baseURL == undefined){
+    baseURL = "";
+}
 
 export async function AddDefaultPath(path: Path, url: string = baseURL + "/api/defaulthttp", method: string = "POST"): Promise<Path> {
     return await fetch(url, {

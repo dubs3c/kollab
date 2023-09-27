@@ -30,15 +30,17 @@ CREATE TABLE IF NOT EXISTS paths_events (
 	id  	INTEGER PRIMARY KEY AUTOINCREMENT,
 	log		JSON,
 	fk_path	INTEGER,
-	FOREIGN KEY(fk_path) REFERENCES paths(id)	
+	FOREIGN KEY(fk_path) REFERENCES paths(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS server_events (
 	id  		INTEGER PRIMARY KEY AUTOINCREMENT,
 	log			JSON,
 	fk_server	INTEGER,
-	FOREIGN KEY(fk_server) REFERENCES servers(id)	
+	FOREIGN KEY(fk_server) REFERENCES servers(id) ON DELETE CASCADE
 );
+
+PRAGMA foreign_keys = ON;
 `
 
 type Path struct {
@@ -74,6 +76,9 @@ type HttpServer struct {
 
 type Server struct {
 	Id         uuid.UUID
+	Name       string `json:"Name"`
+	Type       string `json:"Type"`
+	Port       int    `json:"Port"`
 	HttpServer *HttpServer
 	Shutdown   chan int
 }

@@ -20,7 +20,7 @@ func InsertPath(db *sql.DB, path *PathResponse) error {
 	if err != nil {
 		return err
 	}
-	_, err = db.Exec("INSERT INTO paths(uuid, url, verb, headers, fk_server, body) VALUES(?, ?, ?, ?, ?, ?)", path.Id, path.Path, path.Verb, string(headers), 0, path.Body)
+	_, err = db.Exec("INSERT INTO paths(uuid, url, verb, headers, fk_server, body) VALUES(?, ?, ?, ?, ?, ?)", path.Id, path.Path, path.Verb, string(headers), 1, path.Body)
 	return err
 }
 
@@ -88,8 +88,8 @@ func UpdatePath(db *sql.DB, path *PathResponse) (int64, error) {
 	return rows, err
 }
 
-func InsertServer(db *sql.DB, path PathResponse) error {
-	_, err := db.Exec("INSERT INTO servers(uuid, name, type, port) VALUES(?, ?, ?)", path.Id, path.Path, path.Verb, path.Headers, 0)
+func InsertServer(db *sql.DB, server *Server) error {
+	_, err := db.Exec("INSERT INTO servers(uuid, name, type, port) VALUES(?, ?, ?, ?)", &server.Id, &server.Name, &server.Type, &server.Port)
 	return err
 }
 
