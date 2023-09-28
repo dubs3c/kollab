@@ -100,15 +100,24 @@ func main() {
 		MaxHeaderBytes: 1 << 20,
 	}
 
-	p := &Server{
-		Id:   uuid.UUID{},
-		Name: "Default HTTP Server",
-		Type: "HTTP",
-		Port: defaultPort,
+	srv := &Server{}
+	srv, err = GetServerById(s.DB, 0)
+
+	if err != nil {
+		log.Fatalln("something went wrong fetching default server", err)
 	}
 
-	if err := InsertServer(s.DB, p); err != nil {
-		log.Println("could not insert default http server, error:", err)
+	// If there is no default server, assumed to be ID 0 in the database,
+	// Create a new default http server
+	if *srv == (Server{}) {
+		srv.Id = uuid.UUID{}
+		srv.Name = "Default HTTP Server"
+		srv.Type = "HTTP"
+		srv.Port = defaultPort
+
+		if err := InsertServer(s.DB, srv); err != nil {
+			log.Println("could not insert default http server, error:", err)
+		}
 	}
 
 	idleConnsClosed := make(chan struct{})

@@ -93,6 +93,16 @@ func InsertServer(db *sql.DB, server *Server) error {
 	return err
 }
 
+func GetServerById(db *sql.DB, id int) (*Server, error) {
+	s := &Server{}
+	row := db.QueryRow("SELECT uuid, name, type, port FROM servers WHERE id=?", id)
+	err := row.Scan(&s.Id, &s.Name, &s.Type, &s.Port)
+	if err == sql.ErrNoRows {
+		return s, nil
+	}
+	return s, err
+}
+
 func CreateEventLogPath(db *sql.DB, pathId int, event []byte) error {
 	_, err := db.Exec("INSERT INTO paths_events(log, fk_path) VALUES(?, ?)", event, pathId)
 	return err
