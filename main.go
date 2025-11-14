@@ -54,10 +54,17 @@ func main() {
 	r.Use(middleware.Recoverer)
 	r.Use(s.MyMiddleware)
 
+	// Configure CORS allowed origins from environment variable
+	// Set CORS_ALLOWED_ORIGINS to comma-separated list of allowed origins
+	// Example: CORS_ALLOWED_ORIGINS="https://example.com,https://app.example.com"
+	// Defaults to localhost for development if not set
+	allowedOrigins := []string{"http://localhost:3000", "http://localhost:8080"}
+	if envOrigins := os.Getenv("CORS_ALLOWED_ORIGINS"); envOrigins != "" {
+		allowedOrigins = []string{envOrigins}
+	}
+
 	r.Use(cors.Handler(cors.Options{
-		// AllowedOrigins:   []string{"https://foo.com"}, // Use this to allow specific origin hosts
-		AllowedOrigins: []string{"*"},
-		// AllowOriginFunc:  func(r *http.Request, origin string) bool { return true },
+		AllowedOrigins:   allowedOrigins,
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
 		ExposedHeaders:   []string{"Link"},

@@ -16,7 +16,12 @@ func RespondWithError(w http.ResponseWriter, code int, msg string) {
 
 // RespondWithJSON - Respond with a json formatted string
 func RespondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
-	response, _ := json.Marshal(payload)
+	response, err := json.Marshal(payload)
+	if err != nil {
+		log.Println("RespondWithJSON: failed to marshal payload:", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
 	w.Write(response)
@@ -61,7 +66,12 @@ func (a *Api) AddPath(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	exists, _ := PathExists(a.DB, data.Path)
+	exists, err := PathExists(a.DB, data.Path)
+	if err != nil {
+		log.Println("PathExists error:", err)
+		RespondWithError(w, 500, "Could not check if path exists")
+		return
+	}
 	if exists {
 		RespondWithError(w, 400, "Path already exists...")
 		return
@@ -88,6 +98,7 @@ func (a *Api) GetAllPaths(w http.ResponseWriter, r *http.Request) {
 	paths, err := GetAllPaths(a.DB)
 	if err != nil {
 		RespondWithError(w, 500, "Could fetch data from db")
+		return
 	}
 
 	RespondWithJSON(w, 200, paths)
@@ -96,14 +107,14 @@ func (a *Api) GetAllPaths(w http.ResponseWriter, r *http.Request) {
 func (a *Api) GetPath(w http.ResponseWriter, r *http.Request) {
 
 	id := chi.URLParam(r, "pathId")
-	_, err := uuid.Parse(id)
-	if err != nil {
-		RespondWithError(w, 404, "ID not recognized")
+	if id == "" {
+		RespondWithError(w, 404, "Server ID not supplied")
 		return
 	}
 
-	if id == "" {
-		RespondWithError(w, 404, "Server ID not supplied")
+	_, err := uuid.Parse(id)
+	if err != nil {
+		RespondWithError(w, 404, "ID not recognized")
 		return
 	}
 

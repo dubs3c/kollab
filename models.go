@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS paths (
 	headers   	JSON,
 	body 		TEXT,
 	fk_server	INTEGER,
-	FOREIGN KEY(fk_server) REFERENCES servers(id)
+	FOREIGN KEY(fk_server) REFERENCES servers(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS servers (
