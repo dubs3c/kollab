@@ -31,7 +31,12 @@ func (a *Api) MyMiddleware(next http.Handler) http.Handler {
 							UUID:           response.UUID,
 						}
 
-						eventJson, _ := json.Marshal(event)
+						eventJson, err := json.Marshal(event)
+					if err != nil {
+						log.Println("Middleware: failed to marshal event:", err)
+						RespondWithError(w, 500, "Something went wrong processing your request")
+						return
+					}
 
 						if err := CreateEventLogPath(a.DB, response.Id, eventJson); err != nil {
 							log.Println("Middleware:", err)
@@ -43,7 +48,9 @@ func (a *Api) MyMiddleware(next http.Handler) http.Handler {
 							if response.Headers[0] != "" {
 								for _, header := range response.Headers {
 									h = strings.Split(header, ":")
-									w.Header().Add(h[0], h[1])
+									if len(h) >= 2 {
+										w.Header().Add(h[0], h[1])
+									}
 								}
 							}
 						}

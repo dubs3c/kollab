@@ -73,7 +73,10 @@ func GetPath(db *sql.DB, id string) (*PathResponse, error) {
 
 func DeletePath(db *sql.DB, id string) (int64, error) {
 	result, err := db.Exec("DELETE FROM paths WHERE uuid=?", id)
-	rows, _ := result.RowsAffected()
+	if err != nil {
+		return 0, err
+	}
+	rows, err := result.RowsAffected()
 	return rows, err
 }
 
@@ -84,7 +87,10 @@ func UpdatePath(db *sql.DB, path *PathResponse) (int64, error) {
 		return 0, err
 	}
 	result, err := db.Exec("UPDATE paths SET url=?, verb=?, headers=?, body=? WHERE uuid=?", &path.Path, &path.Verb, string(headers), &path.Body, &path.Id)
-	rows, _ := result.RowsAffected()
+	if err != nil {
+		return 0, err
+	}
+	rows, err := result.RowsAffected()
 	return rows, err
 }
 

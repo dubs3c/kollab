@@ -22,7 +22,9 @@ func CreateHttpServer(server *Server) {
 						if len(response.Headers) != 0 {
 							for _, header := range response.Headers {
 								h = strings.Split(header, ":")
-								w.Header().Add(h[0], h[1])
+								if len(h) >= 2 {
+									w.Header().Add(h[0], h[1])
+								}
 							}
 						}
 						w.Write(response.Body)
